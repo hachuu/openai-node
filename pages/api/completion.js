@@ -41,7 +41,7 @@ function titleOfTopResult (embeddingsData, vector) {
   // sortedSimilarity = [...sortedSimilarity].filter((item) => item[1] > 0.85);
   const sliceIdx = 1;
   const topResults = sortedSimilarity.slice(0, sliceIdx).map(([key, value]) => ({ text: key, similarity: value }));
-  const context = topResults.map((result) => result.text).join('\n');
+  const context = topResults.map((result) => result.text).join('');
   return context;
 }
 

@@ -1,9 +1,10 @@
 import Head from "next/head";
 import {useEffect, useState} from "react";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 import cosine from 'calculate-cosine-similarity';
 
 export default function Home() {
+  const [h3Title, setH3Title] = useState('');
   const [textInput, setTextInput] = useState("");
   const [questionInput, setQuestionInput] = useState("");
   const [file, setFile] = useState();
@@ -14,7 +15,6 @@ export default function Home() {
 
   const [pending, setPending] = useState(false);
   const [imgHover, setImgHover] = useState(false);
-
 
   const [result, setResult] = useState();
   const [intervalResult, setIntervalResult] = useState();
@@ -232,12 +232,27 @@ export default function Home() {
     return result;
   }
 
+  async function setH3TitleResult() {
+    // interval
+    const text = 'WHO IS HAYOUNG';
+    const resultArr = text.split('');
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i >= resultArr.length) {
+        clearInterval(interval);
+      }
+      setH3Title(resultArr.slice(0, i).join(''));
+      i++;
+    }, 200);
+  }
+
   useEffect(() => {
     // url로 체크하여 local 환경인 경우에만 embedding 실행
     if (window.location.href.includes('localhost')) {
       // titleEmbedding();
       // embedding();
     }
+    setH3TitleResult();
   }, [])
 
   return (
@@ -245,82 +260,100 @@ export default function Home() {
       <Head>
         <title>OpenAI Embedding + Completion Model</title>
         <link rel="icon" href="/quokka.svg" />
+        <link href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Dongle:wght@300&family=Rubik+Pixels&display=swap" rel="stylesheet"/>
       </Head>
 
-      <main className={styles.main}>
-        {/* img에 말풍선 template */}
-        { imgHover ? (
-          <div className={styles.balloon}>
-            <div className={styles.balloon__text}>
-              {/* 하트표시 */}
-              quokka ❤️
-              {/* <span role="img" aria-label="heart"></span> */}
+      <div className={styles.main}>
+        <div className={styles.left}>
+          <div className={styles.leftBox}>
+            { h3Title !== 'WHO IS HAYOUNG' ?
+              <h3>{h3Title}</h3>
+              :
+              <h3>{h3Title}</h3>
+            }
+            {/* history에 questions있을 경우에만 표시  */}
+            {questions.length > 0 && 
+
+            <div className={styles.history}>
+              {questions.map((question, index) => 
+                (index !== questions.length - 1) &&
+              (
+                <div key={index}>
+                  <div className={styles.question}>질문 {index+1}. {question}</div>
+                  <div className={styles.lastAnswer}>{resultHistories[index]}</div>
+                </div>
+              ))}
+              { result ? 
+                (
+                  <>
+                    <div className={styles.question}>질문 {questions.length > 0 ? questions.length : ''}: {questionInput}</div>
+                    <div className={styles.answer}>{intervalResult}</div>
+                  </>
+                ) : null
+              }
             </div>
-          </div>
-        ) : null }
-        {/* img hover event 추가 */}
-        <img src="/quokka.svg" className={styles.icon} onMouseEnter={() => setImgHover(true)} onMouseLeave={() => setImgHover(false)} onClick={()=>goMySource()}/>
-        <h3>내가 학습한 하영이란?</h3>
-        <div className={styles.history}>
-          {questions.map((question, index) => 
-            (index !== questions.length - 1) &&
-          (
-            <div key={index}>
-              <div className={styles.question}>질문 {index+1}. {question}</div>
-              <div className={styles.lastAnser}>{resultHistories[index]}</div>
-            </div>
-          ))}
-          { result ? 
-            (
-              <>
-                <div className={styles.question}>질문 {questions.length > 0 ? questions.length : ''}: {questionInput}</div>
-                <div className={styles.answer}>{intervalResult}</div>
-              </>
-            ) : null
-          }
-        </div>
-        {/* 오른쪽에 notice div 생성 */}
-        <div className={styles.notice}>
-          <div className={styles.notice__text}>
-            <div className={styles.notice__title}>Notice</div>
-            <div className={styles.notice__content}>
-              <div className={styles.warning}>*해당 질의에 대한 답변은 OpenAI API를 사용하여 생성되는 것으로 모델에 쓰인 화자가 얘기한 것이 아님을 알려드립니다.*</div>
-              <div>1. 질문은 1개만 입력 가능합니다.</div>
-              <div>2. 질문은 1~2문장으로 작성해주세요.</div>
-            </div>
+            }
           </div>
         </div>
-        <div className={styles.form}>
-          <form onSubmit={onSubmit}>
-            {/* <input type="file"
-                      name="file"
-                      onChange={(e) => fileChange(e)}
-                      multiple={false}
-              /> JSONL 파일 업로드 */}
-            <div className={styles.input}>
-              <input
-                type="text"
-                // name={'text'+inputName}
-                placeholder="ex) 송하영은 나이가 어떻게 되나요?"
-                value={textInput}
-                // disabled pending true인경우
-                disabled={pending}
-                onChange={(e) => setTextInput(e.target.value)}
-              />
+        <div className={styles.right}>
+          {/* 오른쪽에 notice div 생성 */}
+          <div className={styles.fixed}>
+            <div className={styles.notice}>
+              <div className={styles.notice__text}>
+                <div className={styles.notice__title}>Notice</div>
+                <div className={styles.notice__content}>
+                  <div className={styles.warning}>*해당 질의에 대한 답변은 OpenAI API를 사용하여 생성되는 것으로 모델에 쓰인 화자가 얘기한 것이 아님을 알려드립니다.*</div>
+                  <div>1. 질문은 1개만 입력 가능합니다.</div>
+                  <div>2. 질문은 1~2문장으로 작성해주세요.</div>
+                </div>
+              </div>
             </div>
-            <div className={styles.button}>
-              <button className={`${styles.btn} ${styles.custom}`} disabled={pending}>
-                <span>
-                  {pending ? "Loading..." : "Submit"}
-                </span>
-              </button>
-              {/* <button className={`${styles.btn} ${styles.square}`}>
-                <span>Click!</span><span>Read More</span>
-              </button> */}
+            <div className={styles.form}>
+              <form onSubmit={onSubmit}>
+                {/* <input type="file"
+                          name="file"
+                          onChange={(e) => fileChange(e)}
+                          multiple={false}
+                  /> JSONL 파일 업로드 */}
+                <div className={styles.input}>
+                  <input
+                    type="text"
+                    // name={'text'+inputName}
+                    placeholder="ex) 송하영은 나이가 어떻게 되나요?"
+                    value={textInput}
+                    // disabled pending true인경우
+                    disabled={pending}
+                    onChange={(e) => setTextInput(e.target.value)}
+                  />
+                </div>
+                <div className={styles.button}>
+                  <button className={`${styles.btn} ${styles.custom}`} disabled={pending}>
+                    <span>
+                      {pending ? "Loading..." : "Submit"}
+                    </span>
+                  </button>
+                  {/* <button className={`${styles.btn} ${styles.square}`}>
+                    <span>Click!</span><span>Read More</span>
+                  </button> */}
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
-      </main>
+        
+      </div>
     </div>
   );
 }
+{/* img에 말풍선 template */}
+{/* <img src="/quokka.svg" className={styles.icon} onMouseEnter={() => setImgHover(true)} onMouseLeave={() => setImgHover(false)} onClick={()=>goMySource()}/> */}
+// { imgHover ? (
+//   <div className={styles.balloon}>
+//     <div className={styles.balloon__text}>
+//       {/* 하트표시 */}
+//       quokka ❤️
+//       {/* <span role="img" aria-label="heart"></span> */}
+//     </div>
+//   </div>
+// ) : null }
+{/* img hover event 추가 */}
