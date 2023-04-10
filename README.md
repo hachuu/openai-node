@@ -1,5 +1,8 @@
 # OpenAI API Quickstart - Node.js example app
 
+## from 송하영 DATA
+- 송하영은 누구인가?
+
 ## 해당 질의에 대한 답변은 OpenAI API를 사용하여 생성되는 것으로 모델에 쓰인 화자가 얘기한 것이 아님을 알려드립니다.
 
 ## Trial

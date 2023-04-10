@@ -38,7 +38,7 @@ function titleOfTopResult (embeddingsData, vector) {
   const similarity = Object.entries(embeddingsData).map(([key, value]) => [key, cosineSimilarity(value, vector)]);
   let sortedSimilarity = similarity.sort((a, b) => b[1] - a[1]);
   console.log('title에 대한 sortedSimilarity : ', sortedSimilarity);
-  // sortedSimilarity = [...sortedSimilarity].filter((item) => item[1] > 0.80);
+  // sortedSimilarity = [...sortedSimilarity].filter((item) => item[1] > 0.85);
   const sliceIdx = 1;
   const topResults = sortedSimilarity.slice(0, sliceIdx).map(([key, value]) => ({ text: key, similarity: value }));
   const context = topResults.map((result) => result.text).join('\n');
@@ -71,27 +71,15 @@ export default async function (req, res) {
   const {context, question} = contextQuestionOfTopResult(embeddings, vector, temptxt, 'dataset');
   const prompt = 
   `
-    You are a good listener who has good relationship with '송하영',
-    The high similarity of the before related question is ${lastHistory},
-    If there was a before related question
-    then the question is developed by the last question and current question.
-    Answer the question based on the context below and the dialog of answer will be more smooth, and if the question can't be answered based on the context, 
-    and you can't be certain about the answer, you should
-    say \"저도 그 부분에 대해서는 잘 모르겠어요.\".
-    you should answer telling the reason why you can't answer the question. and how you can find the answer. 
-    \n\nContext: ${context}\n\n---\n\nQuestion: ${question}\nAnswer:
+    The following is a conversation with AI 송하영.
+    The AI is helpful, creative, clever, and very friendly.
+    You are going to answer the question by the context. If there is no context, you lead the conversation naturally.
+    Human: Hello, who are you?
+    AI: 저는 송하영과 오랜 친구, 송하영 AI 입니다. 무엇을 도와드릴까요?
+    \n\nContext: ${context}\n\n---\n\n
+    Human: ${question || temptxt}.
+    AI:
   `
-
-// `
-//   The following is a conversation with AI 아이 심리학자.
-//   The AI is helpful, creative, clever, and very friendly.
-//   You are going to answer the question by the context. If there is no context, you lead the conversation naturally.
-//   Human: Hello, who are you?
-//   AI: 저는 ~로 공부한 AI 입니다. 무엇을 도와드릴까요?
-//   \n\nContext: ${context}\n\n---\n\n
-//   Human: ${question || temptxt}.
-//   AI:
-// `
   console.log('#################################################################### title : ', title)
   console.log(prompt);
 

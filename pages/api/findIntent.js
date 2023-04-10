@@ -12,7 +12,7 @@ export default async function (req, res) {
 
     const prompt = `
       sentence : ${sentence}\n\n
-      이 문장에서 주체가 아이와 관련한 것인가? 맞으면 1, 아니면 0을 입력하세요.\n\n
+      이 문장에서 질문이 송하영과 관련한 것인가? 맞으면 1, 아니면 0을 입력하세요.\n\n
     `
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
@@ -25,6 +25,7 @@ export default async function (req, res) {
     });
 
     //공백제거
+    console.log('response.data.choices[0].text : ', response.data.choices[0].text)
     const obj = response.data.choices[0].text.replace(/\s/g, '');
     const result = obj ? JSON.parse(obj) : null;
     res.status(200).json({ result });
