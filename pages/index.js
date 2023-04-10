@@ -122,7 +122,7 @@ export default function Home() {
     if (!textInput || pending) return;
     setInputName(makeRandomNumber());
     try {
-
+      setPending(true);
       // 의도 중 아이와 관련된 질문인지 확인
       const existIntent = await findIntent();
       if (existIntent && existIntent.result) {
@@ -150,6 +150,7 @@ export default function Home() {
     } catch(error) {
       console.error(error);
       alert(error.message);
+      setPending(false);
     }
   }
 
@@ -187,7 +188,6 @@ export default function Home() {
 
   async function question(keyword) {
     let result;
-    setPending(true);
     // const lastHistory = filterLastHistory();
     const response = await fetch("/api/completion", {
       method: "POST",
