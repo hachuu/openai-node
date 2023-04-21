@@ -11,6 +11,8 @@ export default function Home() {
   const inputs = [];
   const [inputName, setInputName] = useState(makeRandomNumber());
   const [questions, setQuestions] = useState([]);
+  const [count, setCount] = useState(0);
+  const [correctAnswer, setCorrectAnswer] = useState('');
   const [resultHistories, setResultHistories] = useState([]);
 
   const [pending, setPending] = useState(false);
@@ -117,6 +119,32 @@ export default function Home() {
     return result;
   }
 
+  // 스무고개 답을 찾아가는 함수
+  async function onQuestionTwenty(event) {
+    event.preventDefault();
+        if (!textInput || pending) return;
+    try {
+      setPending(true);
+      // 질문에 대한 답변 추출
+      const response = await findAnswer();
+      const result = response?.result;
+      if (!result) {
+        return;
+      }
+      setResult(result);
+      setQuestionInput(textInput);
+      spreadQuestion(result);
+      setResultHistories([...resultHistories, result]);
+      setQuestions([...questions, textInput]);
+      setTextInput("");
+    } catch(error) {
+      console.error(error);
+      alert(error.message);
+      setPending(false);
+    }
+  }
+
+  // 기존 나에 관한 질문을 하는 경우
   async function onSubmit(event) {
     event.preventDefault();
     if (!textInput || pending) return;
@@ -186,6 +214,24 @@ export default function Home() {
     return lastHistory.join(', ');
   }
 
+  async function findAnswer() {
+    let result;
+    const lastHistory = filterLastHistory();
+    const response = await fetch("/api/findAnswer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: textInput, correctAnswer}),
+    }).then(
+      (response) => {
+        result = response.json();
+        setPending(false);
+      }
+    );
+    return result;
+  }
+
   async function question(keyword) {
     let result;
     // const lastHistory = filterLastHistory();
@@ -234,7 +280,7 @@ export default function Home() {
 
   async function setH3TitleResult() {
     // interval
-    const text = 'WHO IS HAYOUNG';
+    const text = 'Twenty Qustions';
     const resultArr = text.split('');
     let i = 0;
     const interval = setInterval(() => {
@@ -246,6 +292,26 @@ export default function Home() {
     }, 200);
   }
 
+  async function setAnswer() {
+    const result = await setAnswerResult();
+    console.log(result?.result)
+    setCorrectAnswer(result?.result);
+  }
+
+  async function setAnswerResult() {
+    let result;
+    const answerRes = await fetch("/api/setAnswer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(),
+    }).then(
+      (response) => result = response.json()
+    );
+    return result;
+  }
+
   useEffect(() => {
     // url로 체크하여 local 환경인 경우에만 embedding 실행
     if (window.location.href.includes('localhost')) {
@@ -253,7 +319,23 @@ export default function Home() {
       // embedding();
     }
     setH3TitleResult();
+    setAnswer();
   }, [])
+
+  useEffect(() => {
+    if (questions.length < 21) {
+      setCount(questions.length);
+    } else {
+      const answer = prompt('스무고개 정답을 입력해주세요.');
+      if (answer === correctAnswer) {
+        alert('정답입니다!');
+      } else {
+        alert('틀렸습니다! 정답은 ' + correctAnswer + '입니다.');
+      }
+      setCount(0);
+      setQuestions([]);
+    }
+  }, [questions])
 
   return (
     <div>
@@ -266,7 +348,7 @@ export default function Home() {
       <div className={styles.main}>
         <div className={styles.left}>
           <div className={styles.leftBox}>
-            { h3Title !== 'WHO IS HAYOUNG' ?
+            { h3Title !== 'Twenty Qustions' ?
               <h3>{h3Title}</h3>
               :
               <h3>{h3Title}</h3>
@@ -309,7 +391,8 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.form}>
-              <form onSubmit={onSubmit}>
+              <form onSubmit={onQuestionTwenty}>
+              {/* <form onSubmit={onSubmit}> */}
                 {/* <input type="file"
                           name="file"
                           onChange={(e) => fileChange(e)}
@@ -319,7 +402,7 @@ export default function Home() {
                   <input
                     type="text"
                     // name={'text'+inputName}
-                    placeholder="ex) 송하영은 나이가 어떻게 되나요?"
+                    placeholder="ex) AI가 생각한 정답에 가까운 질문을 하세요!"
                     value={textInput}
                     // disabled pending true인경우
                     disabled={pending}
