@@ -3,6 +3,7 @@
 ## 스무고개 테스트
 - 카테고리 : 동물
 - 20 문항 안에 정답을 찾아 질문하는 게임!
+![openai-스무고개](https://user-images.githubusercontent.com/65321592/233934858-092fc8dd-763b-45a9-be58-abdebb50f581.JPG)
 
 ---
 
