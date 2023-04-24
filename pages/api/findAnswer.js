@@ -5,12 +5,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const messagesHistory = [{role: 'assistant', content: `
-  스무고개 게임 시작!
-  절대 사용자에게 정답을 언급하면 안됩니다.
-  사용자가 질문할 때마다, 당신은 그에게 답변을 해주어야 합니다.
-  사용자가 정답을 언급하면 '정답입니다!'라고 답변해주세요.
-` }];
+const messagesHistory = [];
 
 export default async function (req, res) {
   if (!configuration.apiKey) {
@@ -33,12 +28,19 @@ export default async function (req, res) {
     //   질문: ${text}
     //   AI:
     // `
-    if (messagesHistory.length === 1) {
-      messagesHistory.push({role: "assistant", content: `정답은 ${answer}입니다.`})
+    if (messagesHistory.length === 0) {
+      messagesHistory.push(
+        {role: 'system', content: `
+          스무고개 게임 시작!
+          절대 사용자에게 정답을 언급하면 안됩니다.
+          사용자가 질문할 때마다, 당신은 그에게 답변을 해주어야 합니다.
+          사용자가 정답을 언급하면 '정답입니다!'라고 답변해주세요.
+          정답은 ${answer}입니다.
+        ` }
+      )
     }
 
     messagesHistory.push({role: "user", content: text})
-    
     console.log('findAnswer messagesHistory : ', messagesHistory);
 
     const completion = await openai.createChatCompletion({
@@ -54,10 +56,13 @@ export default async function (req, res) {
     const pattern = new RegExp(answer, 'g');
     const removeAnswer = 'O'.repeat(answer.length);
     const result = completion.data.choices[0].message.content?.replace(pattern, removeAnswer);
-    messagesHistory.push({role: "system", content: result})
+    messagesHistory.push({role: "assistant", content: result})
 
     const success = result.includes('정답입니다!');
-
+    if (success) {
+      // messageHistory비우기
+      messagesHistory.length = 0;
+    }
     res.status(200).json({ result, success });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
