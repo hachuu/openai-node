@@ -22,6 +22,8 @@ export default function Home() {
   const [intervalResult, setIntervalResult] = useState();
   const [splitResultArr, setSplitResultArr] = useState([]);
 
+  const [restart, setRestart] = useState(false);
+
   const TWENTY_CNT = 20;
 
   function makeRandomNumber() {
@@ -130,18 +132,15 @@ export default function Home() {
       // 질문에 대한 답변 추출
       const response = await findAnswer();
       if (response.success) {
-        setCount(0);
-        setQuestions([]);
-      } else {
-        const result = response?.result.replace(/\\n/g, '') || '모르겠어';
-        setResult(result);
-        setQuestionInput(textInput);
-        spreadQuestion(result);
-        setResultHistories([...resultHistories, result]);
-        setQuestions([...questions, textInput]);
-        setTextInput("");
+        setRestart(true);
       }
-
+      const result = response?.result.replace(/\\n/g, '') || '모르겠어';
+      setResult(result);
+      setQuestionInput(textInput);
+      spreadQuestion(result);
+      setResultHistories([...resultHistories, result]);
+      setQuestions([...questions, textInput]);
+      setTextInput("");
     } catch(error) {
       console.error(error);
       alert(error.message);
@@ -318,12 +317,22 @@ export default function Home() {
     return result;
   }
 
+
+  async function restartGame() {
+    setRestart(false);
+    setAnswer();
+    setCount(0);
+    setQuestions([]);
+    setResultHistories([]);
+  }
+
   useEffect(() => {
     // url로 체크하여 local 환경인 경우에만 embedding 실행
     if (window.location.href.includes('localhost')) {
       // titleEmbedding();
       // embedding();
     }
+    console.log('count ', count)
     setH3TitleResult();
     setAnswer();
   }, [])
@@ -397,6 +406,7 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.form}>
+            {!restart && (
               <form onSubmit={onQuestionTwenty}>
               {/* <form onSubmit={onSubmit}> */}
                 {/* <input type="file"
@@ -404,28 +414,41 @@ export default function Home() {
                           onChange={(e) => fileChange(e)}
                           multiple={false}
                   /> JSONL 파일 업로드 */}
-                <div className={styles.input}>
-                  <input
-                    type="text"
-                    // name={'text'+inputName}
-                    placeholder="ex) AI가 생각한 정답에 가까운 질문을 하세요!"
-                    value={textInput}
-                    // disabled pending true인경우
-                    disabled={pending}
-                    onChange={(e) => setTextInput(e.target.value)}
-                  />
-                </div>
+                  <div className={styles.input}>
+                    <input
+                      type="text"
+                      // name={'text'+inputName}
+                      placeholder="ex) AI가 생각한 정답에 가까운 질문을 하세요!"
+                      value={textInput}
+                      // disabled pending true인경우
+                      disabled={pending}
+                      onChange={(e) => setTextInput(e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.button}>
+                    <button className={`${styles.btn} ${styles.custom}`} disabled={pending}>
+                      <span>
+                        {pending ? "Loading..." : "Submit"}
+                      </span>
+                    </button>
+                    {/* <button className={`${styles.btn} ${styles.square}`}>
+                      <span>Click!</span><span>Read More</span>
+                    </button> */}
+                  </div>
+                
+              </form>
+            )}
+            {restart && (
+              <>
                 <div className={styles.button}>
-                  <button className={`${styles.btn} ${styles.custom}`} disabled={pending}>
+                  <button className={`${styles.btn} ${styles.custom}`} disabled={pending} onClick={restartGame}>
                     <span>
-                      {pending ? "Loading..." : "Submit"}
+                      다시 시작하기
                     </span>
                   </button>
-                  {/* <button className={`${styles.btn} ${styles.square}`}>
-                    <span>Click!</span><span>Read More</span>
-                  </button> */}
                 </div>
-              </form>
+              </>
+            )}
             </div>
           </div>
         </div>
