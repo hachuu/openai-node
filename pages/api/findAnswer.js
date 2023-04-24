@@ -21,12 +21,16 @@ export default async function (req, res) {
 
     const prompt = 
     `
-    스무고개 게임!
-    제가 알고 있는 정답은 '${answer}'입니다. 
-    여러분은 제가 생각한 것이 무엇인지 맞혀보세요.
-    대답을 할 수 없는 경우 '모르겠어'라고 입력해주세요.
-    질문 : ${text}
-    AI: 
+      스무고개 게임 시작!
+      정답은 ${answer}입니다.
+      사용자가 질문할 때마다, 당신은 그에게 답변을 해주어야 합니다.
+      사용자가 '${answer}'을 언급하면 '정답입니다!'라고 답변해주세요.
+      사용자가 질문하는 내용을 입력해주세요:
+
+      사용자: 이 동물은 포유류인가요?
+      AI: (포유류인 경우) 네, 포유류입니다. / (아닌 경우) 아니요, 포유류가 아닙니다.
+      사용자: ${text}
+      AI: 
     `
     // `
     //   스무고개 게임 정답은 ${answer}이고, 사용자는 답을 몰라.
@@ -41,7 +45,7 @@ export default async function (req, res) {
       model: 'text-davinci-003',
       prompt,
       max_tokens: 1000,
-      temperature: 0.9,
+      temperature: 0.5,
       // top_p: 1.0,
       // presence_penalty: -1.0,
       // frequency_penalty: -1.0,
@@ -55,8 +59,14 @@ export default async function (req, res) {
       user: "curious-ai-hy",
     });
     console.log('스무고개 질문에 대한 답 : ', completion.data);
+    
+    //answer 여러개 있을 수 있음
+    const pattern = new RegExp(answer, 'g');
+    const removeAnswer = 'O'.repeat(answer.length);
+    const result = completion.data.choices[0].text.replace(pattern, removeAnswer);
+    const success = result.includes('정답입니다!');
 
-    res.status(200).json({ result: completion.data.choices[0].text });
+    res.status(200).json({ result, success });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

@@ -22,6 +22,8 @@ export default function Home() {
   const [intervalResult, setIntervalResult] = useState();
   const [splitResultArr, setSplitResultArr] = useState([]);
 
+  const TWENTY_CNT = 20;
+
   function makeRandomNumber() {
     const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
     return random(1, 1000);
@@ -127,16 +129,19 @@ export default function Home() {
       setPending(true);
       // 질문에 대한 답변 추출
       const response = await findAnswer();
-      const result = response?.result;
-      if (!result) {
-        return;
+      if (response.success) {
+        setCount(0);
+        setQuestions([]);
+      } else {
+        const result = response?.result.replace(/\\n/g, '') || '모르겠어';
+        setResult(result);
+        setQuestionInput(textInput);
+        spreadQuestion(result);
+        setResultHistories([...resultHistories, result]);
+        setQuestions([...questions, textInput]);
+        setTextInput("");
       }
-      setResult(result);
-      setQuestionInput(textInput);
-      spreadQuestion(result);
-      setResultHistories([...resultHistories, result]);
-      setQuestions([...questions, textInput]);
-      setTextInput("");
+
     } catch(error) {
       console.error(error);
       alert(error.message);
@@ -293,19 +298,20 @@ export default function Home() {
   }
 
   async function setAnswer() {
-    const result = await setAnswerResult();
+    const level = prompt('스무고개 난이도를 선택해주세요 1~3(숫자만 입력해주세요)');
+    const result = await setAnswerResult(level);
     console.log(result?.result)
     setCorrectAnswer(result?.result);
   }
 
-  async function setAnswerResult() {
+  async function setAnswerResult(level) {
     let result;
     const answerRes = await fetch("/api/setAnswer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(),
+      body: JSON.stringify({level}),
     }).then(
       (response) => result = response.json()
     );
@@ -323,7 +329,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    if (questions.length < 21) {
+    if (questions.length <= TWENTY_CNT) {
       setCount(questions.length);
     } else {
       const answer = prompt('스무고개 정답을 입력해주세요.');
@@ -356,21 +362,21 @@ export default function Home() {
             {/* history에 questions있을 경우에만 표시  */}
             {questions.length > 0 && 
 
-            <div className={styles.history}>
+            <div>
               {questions.map((question, index) => 
                 (index !== questions.length - 1) &&
               (
-                <div key={index}>
+                <div key={index} className={styles.history}>
                   <div className={styles.question}>질문 {index+1}. {question}</div>
                   <div className={styles.lastAnswer}>{resultHistories[index]}</div>
                 </div>
               ))}
               { result ? 
                 (
-                  <>
+                  <div className={styles.current}>
                     <div className={styles.question}>질문 {questions.length > 0 ? questions.length : ''}: {questionInput}</div>
                     <div className={styles.answer}>{intervalResult}</div>
-                  </>
+                  </div>
                 ) : null
               }
             </div>
@@ -384,9 +390,9 @@ export default function Home() {
               <div className={styles.notice__text}>
                 <div className={styles.notice__title}>Notice</div>
                 <div className={styles.notice__content}>
-                  <div className={styles.warning}>*해당 질의에 대한 답변은 OpenAI API를 사용하여 생성되는 것으로 모델에 쓰인 화자가 얘기한 것이 아님을 알려드립니다.*</div>
-                  <div>1. 질문은 1개만 입력 가능합니다.</div>
-                  <div>2. 질문은 1~2문장으로 작성해주세요.</div>
+                  <div className={styles.warning}>*해당 질의에 대한 답변은 OpenAI API를 사용하여 생성되는 것으로 정확하지 않을 수 있습니다.*</div>
+                  <div>1. 카테고리는 '동물'입니다.</div>
+                  <div>2. 질문은 1개만 입력 가능합니다.</div>
                 </div>
               </div>
             </div>
