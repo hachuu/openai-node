@@ -1,5 +1,12 @@
 # OpenAI API Quickstart - Node.js example app
 
+## 스무고개 테스트
+- 카테고리 : 동물
+- 20 문항 안에 정답을 찾아 질문하는 게임!
+
+---
+
+
 ## from 송하영 DATA
 - 송하영은 누구인가?
 
