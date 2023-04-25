@@ -1,4 +1,6 @@
 import styles from "../index.module.scss";
+import { useEffect, useRef } from 'react';
+
 export default function QuestionHistories({questions, resultHistories, result, questionInput, intervalResult}) {
   const curRef = useRef(null);
 

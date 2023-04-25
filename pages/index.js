@@ -1,5 +1,5 @@
 import Head from "next/head";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import useAPICall from "./hooks/useAPICall";
 import useCommon from "./hooks/useCommon";
