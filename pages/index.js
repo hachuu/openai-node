@@ -221,7 +221,7 @@ export default function Home() {
   async function findAnswer() {
     let result;
     const lastHistory = filterLastHistory();
-    const response = await fetch("/api/findAnswer", {
+    const response = await fetch("/api/twentyQuestions/findAnswer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -305,7 +305,7 @@ export default function Home() {
 
   async function setAnswerResult(level) {
     let result;
-    const answerRes = await fetch("/api/setAnswer", {
+    const answerRes = await fetch("/api/twentyQuestions/setAnswer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -316,7 +316,6 @@ export default function Home() {
     );
     return result;
   }
-
 
   async function restartGame() {
     setRestart(false);
