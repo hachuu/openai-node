@@ -32,9 +32,9 @@ export default async function (req, res) {
       messagesHistory.push(
         {role: 'system', content: `
           스무고개 게임 시작!
-          절대 사용자에게 정답을 언급하면 안됩니다.
-          사용자가 질문할 때마다, 당신은 그에게 답변을 해주어야 합니다.
-          사용자가 정답을 언급하면 '정답입니다!'라고 답변해주세요.
+          절대 사용자에게 ${answer}을 언급하면 안돼.
+          정답을 직접적으로 물어보는 질문에는 정답을 알려주지마.
+          사용자가 정답을 언급하면 '정답입니다!'하고 ${answer}에 대한 간략한 설명과 함께 답변해줘.
           정답은 ${answer}입니다.
         ` }
       )
@@ -50,20 +50,21 @@ export default async function (req, res) {
       stop: ['\n\n', '\n', 'AI:'],
       messages: messagesHistory
     });
-    console.log('스무고개 질문에 대한 답 : ', completion.data, completion.data.choices[0].message.content);
     
-    //answer 여러개 있을 수 있음
     const pattern = new RegExp(answer, 'g');
     const removeAnswer = 'O'.repeat(answer.length);
-    const result = completion.data.choices[0].message.content?.replace(pattern, removeAnswer);
+    const resultContent = completion.data.choices[0].message.content;
+    const result = resultContent?.replace(pattern, removeAnswer);
     messagesHistory.push({role: "assistant", content: result})
 
     const success = result.includes('정답입니다!');
     if (success) {
       // messageHistory비우기
-      messagesHistory.length = 0;
+      messagesHistory.splice(0, messagesHistory.length);
+      res.status(200).json({ result: resultContent, success });
+      return;
     }
-    res.status(200).json({ result, success });
+    res.status(200).json({ result: resultContent, success });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -79,18 +80,3 @@ export default async function (req, res) {
     }
   }
 }
-// model: "gpt-3.5-turbo",
-//       prompt,
-//       max_tokens: 1000,
-//       temperature: 0.5,
-//       // top_p: 1.0,
-//       // presence_penalty: -1.0,
-//       // frequency_penalty: -1.0,
-//       // best_of: 2,
-//       stop: ['\n\n', '\n', 'AI:'],
-//       // n: 1,
-//       // stream: false,
-//       presence_penalty: 0,
-//       frequency_penalty: 0,
-//       best_of: 1,
-//       user: "curious-ai-hy",
