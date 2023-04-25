@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import useAPICall from "./hooks/useAPICall";
 import useCommon from "./hooks/useCommon";
-import QuestionHistories from "./components/questionHistories";
+import QuestionHistories from "./components/QuestionHistories";
 import { createGlobalStyle } from 'styled-components';
 import normalize from 'normalize.css'; // or use your own CSS Reset
 
