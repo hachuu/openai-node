@@ -2,6 +2,7 @@ import Head from "next/head";
 import {useEffect, useState} from "react";
 import styles from "./index.module.scss";
 import cosine from 'calculate-cosine-similarity';
+import useAPICall from "./hooks/useAPICall";
 
 export default function Home() {
   const [h3Title, setH3Title] = useState('');
@@ -26,13 +27,14 @@ export default function Home() {
 
   const TWENTY_CNT = 20;
 
+  const {
+    setAnswerResult,
+    findAnswer
+  } = useAPICall();
+
   function makeRandomNumber() {
     const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
     return random(1, 1000);
-  }
-
-  function goMySource() {
-    window.open('https://hachuu.github.io/hachu/');
   }
 
   useEffect(() => {
@@ -47,29 +49,6 @@ export default function Home() {
     await fineTune();
   }
 
-  async function fineTune() {
-    // file to newFormData
-    const newFormData = new FormData();
-    newFormData.append("file", file);
-    const uploadResponse = await fetch("/api/uploadFile", {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: newFormData,
-    });
-    const { filename } = await uploadResponse.json();
-    const fineTuneResponse = await fetch("/api/finetune", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        file: filename
-        // file: './public/dataset.jsonl'
-      })
-    });
-  }
   // result의 글자를 ,나 .로 배열로 나눠서 문장별로 나누는 함수
   function splitResult(result) {
     const resultArr = result.split(/[,|.]/);
@@ -91,38 +70,6 @@ export default function Home() {
     }, 50);
   }
 
-  async function findIntent() {
-    let result;
-    const response = await fetch("/api/findIntent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: textInput }),
-    }).then(
-      (response) => {
-        result = response.json();
-      }
-    );
-    return result;
-  }
-
-  async function findSubjectFromQuestion() {
-    let result;
-    const response = await fetch("/api/findSubjectFromQuestion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: textInput }),
-    }).then(
-      (response) => {
-        result = response.json();
-      }
-    );
-    return result;
-  }
-
   // 스무고개 답을 찾아가는 함수
   async function onQuestionTwenty(event) {
     event.preventDefault();
@@ -130,7 +77,7 @@ export default function Home() {
     try {
       setPending(true);
       // 질문에 대한 답변 추출
-      const response = await findAnswer();
+      const response = await findAnswer(textInput, correctAnswer);
       if (response.success) {
         setRestart(true);
       }
@@ -144,6 +91,8 @@ export default function Home() {
     } catch(error) {
       console.error(error);
       alert(error.message);
+      setPending(false);
+    } finally {
       setPending(false);
     }
   }
@@ -186,26 +135,6 @@ export default function Home() {
     }
   }
 
-  async function generatePrompt() {
-    const response = await fetch("/api/generateprompt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ test: '' }),
-    });
-  }
-
-  async function extractTextFromPDF() {
-    const response = await fetch("/api/extractTextFromPdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ test: '' }),
-    });
-  }
-
   function filterLastHistory() {
     // 현재 질문한 내용과 이전 질문들의 유사도가 높은 경우 이전 질문들과 연계해서 history를 만들어주고, 유사도가 없는 경우 새로운 데이터로 인지 한다.
     let lastHistory = [];
@@ -216,70 +145,6 @@ export default function Home() {
       lastHistory = lastThreeQuestions.map((question, index) => (index+1+". ").concat(question.concat(' => ' + lastThreeHistories[index])));
     }
     return lastHistory.join(', ');
-  }
-
-  async function findAnswer() {
-    let result;
-    const lastHistory = filterLastHistory();
-    const response = await fetch("/api/twentyQuestions/findAnswer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: textInput, correctAnswer}),
-    }).then(
-      (response) => {
-        result = response.json();
-        setPending(false);
-      }
-    );
-    return result;
-  }
-
-  async function question(keyword) {
-    let result;
-    // const lastHistory = filterLastHistory();
-    const response = await fetch("/api/completion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: textInput, keyword: keyword?.result }),
-    }).then(
-      (response) => {
-        result = response.json();
-        setPending(false);
-      }
-    );
-    return result;
-  }
-
-  async function titleEmbedding() {
-    let result;
-    const response = await fetch("/api/titleEmbedding", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({  }),
-    }).then(
-      (response) => result = response.json()
-    );
-    return result;
-  }
-
-  async function embedding() {
-    let result;
-    const response = await fetch("/api/embeddings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ text: textInput }),
-    }).then(
-      (response) => result = response.json()
-    );
-    return result;
   }
 
   async function setH3TitleResult() {
@@ -301,20 +166,6 @@ export default function Home() {
     const result = await setAnswerResult(level);
     console.log(result?.result)
     setCorrectAnswer(result?.result);
-  }
-
-  async function setAnswerResult(level) {
-    let result;
-    const answerRes = await fetch("/api/twentyQuestions/setAnswer", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({level}),
-    }).then(
-      (response) => result = response.json()
-    );
-    return result;
   }
 
   async function restartGame() {
@@ -456,15 +307,3 @@ export default function Home() {
     </div>
   );
 }
-{/* img에 말풍선 template */}
-{/* <img src="/quokka.svg" className={styles.icon} onMouseEnter={() => setImgHover(true)} onMouseLeave={() => setImgHover(false)} onClick={()=>goMySource()}/> */}
-// { imgHover ? (
-//   <div className={styles.balloon}>
-//     <div className={styles.balloon__text}>
-//       {/* 하트표시 */}
-//       quokka ❤️
-//       {/* <span role="img" aria-label="heart"></span> */}
-//     </div>
-//   </div>
-// ) : null }
-{/* img hover event 추가 */}
