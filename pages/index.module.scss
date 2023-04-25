@@ -22,6 +22,22 @@
 //   src: url(https://fonts.gstatic.com/s/dongle/v8/sJoG3Ltdjt6VPkqeEcxrZ12bz3SmUitvVvdIsVspkq6sHljt.0.woff2) format('woff2');
 // }
 
+.scrollable {
+  /* 스크롤바 스타일링 */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d6d6d6;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+  }
+}
+
 .main,
 .main input {
   font-size: 13px;
@@ -31,15 +47,17 @@
 }
 .main {
   width: 100%;
+  height: 100vh;
   flex-flow: row;
   display: flex;
   // align-content: flex-end;
   transition: all 1s cubic-bezier(0.075, 0.82, 0.165, 1);
   .left {
+    margin: 8px;
     flex: 1;
     width: 70%;
-    // background-color: rgb(39, 74, 138);// grad
     background: radial-gradient(circle, rgba(0,172,238,1) 0%, rgb(39, 74, 138) 100%);
+    border-right: 1px dashed #e0e0e0;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     display: flex;
@@ -51,7 +69,6 @@
       // width 가운데
       width: 100%;
       // height 가운데
-      height: 100%;
       z-index: 3;
       //box shadow
       box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
@@ -122,6 +139,21 @@
       //   }
       // }
       .historyBox {
+        // height 고정하고 해당 부분만 세로 스크롤 나오도록
+        max-height: 400px;
+        overflow-y: scroll;
+          /* 스크롤바 스타일링 */
+        &::-webkit-scrollbar {
+          width: 8px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: rgb(39, 74, 138, 0.2);
+          border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background-color: rgba(67, 91, 136, 0.2);
+        }
 
         display: flex;
         flex-direction: column;
@@ -133,12 +165,10 @@
           align-items: center;
           width: 500px;
           border-radius: 8px;
-          //rgba(54, 28, 117, 0.5)보다 진한색
           background-color: rgba(98, 85, 128, 0.8);
           border: 1px solid #ACCFCB;
           padding: 16px;
           margin: 16px 16px 16px 16px;
-          //shadow 진하게
           box-shadow: 0 0 10px 0 rgba(54, 28, 117, 0.5);
           transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
           .question {
@@ -159,6 +189,7 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+          width: 500px;
           border-radius: 8px;
           //rgba(54, 28, 117, 0.5)보다 진한색
           background-color: rgba(54, 28, 117, 0.8);
@@ -185,9 +216,9 @@
     }
   }
   .right {
+    margin: 8px 8px 8px 0;
     // 스크롤 금지
     overflow-y: hidden;
-    min-height: 100vh;
     background-color: rgb(39, 74, 138);
     border-left: 1px dashed #e0e0e0;
     width: 30%;
@@ -195,9 +226,6 @@
     flex-direction: column;
     align-items: center;
     .fixed {
-      position: fixed;
-      top: 0;
-      right: 0;
       max-width: 460px;
       .notice {
         border : 1px solid rgba(39, 138, 52, 0.8);

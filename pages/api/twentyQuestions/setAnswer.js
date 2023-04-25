@@ -18,16 +18,19 @@ export default async function (req, res) {
   try {
 
     const level = req.body.level;
+    const category = req.body.category;
 
     const prompt = 
     `
     당신은 스무고개 게임의 AI입니다.
-    게임의 주제는 '동물'입니다. '동물' 중에서 하나를 선택하세요.
+    게임의 주제는 '${category}'입니다. '${category}' 중에서 하나를 선택하세요.
     선택한 난이도는 ${level}입니다.
     난이도에 맞게 정답을 생각해주세요.
 
     정답: 
     `
+
+    console.log(prompt);
 
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',

@@ -1,6 +1,13 @@
 import styles from "../index.module.scss";
 export default function QuestionHistories({questions, resultHistories, result, questionInput, intervalResult}) {
+  const curRef = useRef(null);
 
+  useEffect(() => {
+    if (curRef.current) {
+      curRef.current.scrollIntoView({behavior: 'smooth', block: 'end'});
+    }
+
+  }, [curRef]);
   
   function filterLastHistory() {
     // 현재 질문한 내용과 이전 질문들의 유사도가 높은 경우 이전 질문들과 연계해서 history를 만들어주고, 유사도가 없는 경우 새로운 데이터로 인지 한다.
@@ -34,7 +41,7 @@ export default function QuestionHistories({questions, resultHistories, result, q
       }
       { result ? 
         (
-          <div className={styles.current}>
+          <div className={styles.current} ref={curRef}>
             <div className={styles.question}>질문 {questions.length > 0 ? questions.length : ''}: {questionInput}</div>
             <div className={styles.answer}>{intervalResult}</div>
           </div>

@@ -120,28 +120,28 @@ export default function useAPICall() {
     return result;
   }
 
-  async function setAnswerResult(level) {
+  async function setAnswerResult(level, category) {
     let result;
     const answerRes = await fetch("/api/twentyQuestions/setAnswer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({level}),
+      body: JSON.stringify({level, category}),
     }).then(
       (response) => result = response.json()
     );
     return result;
   }
 
-  async function findAnswer({text, correctAnswer, count}) {
+  async function findAnswer({text, correctAnswer, count, category}) {
     let result;
     const response = await fetch("/api/twentyQuestions/findAnswer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text, correctAnswer, count}),
+      body: JSON.stringify({ text, correctAnswer, count, category}),
     }).then(
       (response) => {
         result = response.json();

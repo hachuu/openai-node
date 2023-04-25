@@ -4,11 +4,21 @@ import styles from "./index.module.scss";
 import useAPICall from "./hooks/useAPICall";
 import useCommon from "./hooks/useCommon";
 import QuestionHistories from "./components/questionHistories";
+import { createGlobalStyle } from 'styled-components';
+import normalize from 'normalize.css'; // or use your own CSS Reset
 
+const GlobalStyle = createGlobalStyle`
+  ${normalize}
+  /* Add your own custom styles */
+  body {
+    margin: 0;
+  }
+`;
 
 export default function Home() {
 
   const [selectedConcept, setSelectedConcept] = useState('');
+  const [category, setCategory] = useState('');
 
   const [h3Title, setH3Title] = useState('');
   const [textInput, setTextInput] = useState("");
@@ -37,11 +47,6 @@ export default function Home() {
   const {
     getH3Title,
   } = useCommon();
-
-  useEffect(() => {
-  // 스크롤을 맨 아래로 내리는 함수
-  window.scrollTo(0, document.body.scrollHeight);
-  }, [questions]);
 
   function spreadQuestion(result) {
     // setQuestionInput에 0.5초마다 한글자씩 추가하는 함수
@@ -87,7 +92,7 @@ export default function Home() {
 
   async function getTwentyQuestionResult() {
     // 질문에 대한 답변 추출
-    const response = await findAnswer({text: textInput, correctAnswer, count});
+    const response = await findAnswer({text: textInput, correctAnswer, count, category});
     if (response.success) {
       setRestart(true);
     }
@@ -131,13 +136,19 @@ export default function Home() {
 
   async function setAnswer() {
     const level = prompt('스무고개 난이도를 선택해주세요 1~3(숫자만 입력해주세요)');
-    const result = await setAnswerResult(level);
+    const result = await setAnswerResult(level, category);
     console.log(result?.result)
     setCorrectAnswer(result?.result);
   }
 
   async function selectConcept() {
     setSelectedConcept('twenty');
+    function randomCategory() {
+      const categoryArr = ['동물', '세계 음식', 'k-food', '가전제품'];
+      const random = Math.floor(Math.random() * categoryArr.length);
+      return categoryArr[random];
+    }
+    setCategory(randomCategory());
   }
 
   async function restartGame() {
@@ -161,15 +172,6 @@ export default function Home() {
   useEffect(() => {
     if (questions.length <= TWENTY_CNT) {
       setCount(questions.length);
-    } else {
-      const answer = prompt('스무고개 정답을 입력해주세요.');
-      if (answer === correctAnswer) {
-        alert('정답입니다!');
-      } else {
-        alert('틀렸습니다! 정답은 ' + correctAnswer + '입니다.');
-      }
-      setCount(0);
-      setQuestions([]);
     }
   }, [questions])
 
@@ -194,7 +196,7 @@ export default function Home() {
                 <div className={styles.notice__title}>Notice</div>
                 <div className={styles.notice__content}>
                   <div className={styles.warning}>*해당 질의에 대한 답변은 OpenAI API를 사용하여 생성되는 것으로 정확하지 않을 수 있습니다.*</div>
-                  <div>1. 카테고리는 '동물'입니다.</div>
+                  <div>1. 카테고리는 '{category}'입니다.</div>
                   <div>2. 질문은 1개만 입력 가능합니다.</div>
                 </div>
               </div>
