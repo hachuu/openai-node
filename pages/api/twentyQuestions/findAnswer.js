@@ -20,19 +20,16 @@ export default async function (req, res) {
   try {
     const answer = req.body.correctAnswer;
     const text = req.body.text;
+    const count = req.body.count;
+    if (count === 0 && messagesHistory.length > 0) {
+      messagesHistory.splice(0, messagesHistory.length);
+    }
 
-    
-    // `
-    //   스무고개 게임 정답은 ${answer}이고, 사용자는 답을 몰라.
-    //   너는 ${answer}을 알려주면 안되고 사용자가 입력한 질문에 맞게 답변을 해줘.
-    //   질문: ${text}
-    //   AI:
-    // `
     if (messagesHistory.length === 0) {
       messagesHistory.push(
         {role: 'system', content: `
           스무고개 게임 시작!
-          절대 사용자에게 ${answer}을 언급하면 안돼.
+          절대 사용자에게 '${answer}'(을)를 언급하면 안되고 동물이라고 지칭해줘.
           정답을 직접적으로 물어보는 질문에는 정답을 알려주지마.
           사용자가 정답을 언급하면 '정답입니다!'하고 ${answer}에 대한 간략한 설명과 함께 답변해줘.
           정답은 ${answer}입니다.
@@ -64,7 +61,7 @@ export default async function (req, res) {
       res.status(200).json({ result: resultContent, success });
       return;
     }
-    res.status(200).json({ result: resultContent, success });
+    res.status(200).json({ result: result, success });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

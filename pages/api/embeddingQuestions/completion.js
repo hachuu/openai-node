@@ -4,7 +4,7 @@ import fs from 'fs';
 import { createReadStream } from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
-import {titleObjs} from '../../public/file/exportjson.js';
+import { titleObjs } from '../../../public/file/exportjson.js'
 
 const dotProduct = (a, b) => a.map((x, i) => x * b[i]).reduce((m, n) => m + n);
 

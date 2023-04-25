@@ -121,53 +121,65 @@
       //     }
       //   }
       // }
-      
-      .history {
-        // 가운데 정렬 border round
-        border-radius: 8px;
-        //rgba(54, 28, 117, 0.5)보다 진한색
-        background-color: rgba(98, 85, 128, 0.8);
-        border: 1px solid #ACCFCB;
-        padding: 16px;
-        margin: 16px 16px 16px 16px;
-        //shadow 진하게
-        box-shadow: 0 0 10px 0 rgba(54, 28, 117, 0.5);
-        transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-        .question {
-          margin: 0 0 16px 0;
-          color: #fff;
-          font-family: 'Dongle', sans-serif;
-          font-size: 30px;
+      .historyBox {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .history {
+          // 가운데 정렬
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 500px;
+          border-radius: 8px;
+          //rgba(54, 28, 117, 0.5)보다 진한색
+          background-color: rgba(98, 85, 128, 0.8);
+          border: 1px solid #ACCFCB;
+          padding: 16px;
+          margin: 16px 16px 16px 16px;
+          //shadow 진하게
+          box-shadow: 0 0 10px 0 rgba(54, 28, 117, 0.5);
+          transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+          .question {
+            margin: 0 0 16px 0;
+            color: #fff;
+            font-family: 'Dongle', sans-serif;
+            font-size: 30px;
+          }
+          .lastAnswer {
+            margin: 0 0 16px 0;
+            color: #fff;
+            font-family: 'Dongle', sans-serif;
+            font-size: 30px;
+          }
         }
-        .lastAnswer {
-          margin: 0 0 16px 0;
-          color: #fff;
-          font-family: 'Dongle', sans-serif;
-          font-size: 30px;
-        }
-      }
-      .current {
-        // 가운데 정렬 border round
-        border-radius: 8px;
-        //rgba(54, 28, 117, 0.5)보다 진한색
-        background-color: rgba(54, 28, 117, 0.8);
-        border: 1px solid #ACCFCB;
-        padding: 16px;
-        margin: 16px 16px 16px 16px;
-        //shadow 진하게
-        box-shadow: 0 0 10px 0 rgba(54, 28, 117, 0.5);
-        transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
-        .question {
-          margin: 0 0 16px 0;
-          color: #fff;
-          font-family: 'Dongle', sans-serif;
-          font-size: 30px;
-        }
-        .answer {
-          margin: 0 0 16px 0;
-          color: #fff;
-          font-family: 'Dongle', sans-serif;
-          font-size: 30px;
+        .current {
+          // 가운데 정렬
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          border-radius: 8px;
+          //rgba(54, 28, 117, 0.5)보다 진한색
+          background-color: rgba(54, 28, 117, 0.8);
+          border: 1px solid #ACCFCB;
+          padding: 16px;
+          margin: 16px 16px 16px 16px;
+          //shadow 진하게
+          box-shadow: 0 0 10px 0 rgba(54, 28, 117, 0.5);
+          transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+          .question {
+            margin: 0 0 16px 0;
+            color: #fff;
+            font-family: 'Dongle', sans-serif;
+            font-size: 30px;
+          }
+          .answer {
+            margin: 0 0 16px 0;
+            color: #fff;
+            font-family: 'Dongle', sans-serif;
+            font-size: 30px;
+          }
         }
       }
     }

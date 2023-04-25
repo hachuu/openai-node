@@ -23,25 +23,11 @@ export default async function (req, res) {
     `
     당신은 스무고개 게임의 AI입니다.
     게임의 주제는 '동물'입니다. '동물' 중에서 하나를 선택하세요.
-    당신의 난이도 level은 ${level}이고 난이도에 맞게 정답을 생각해주세요.
+    선택한 난이도는 ${level}입니다.
+    난이도에 맞게 정답을 생각해주세요.
 
-    
     정답: 
     `
-    // `
-    // 이제부터 스무고개 게임을 시작할 건데
-    // 매번 새로운 정답을 생성하도록 할게요.
-    // 정답에 대한 단서는 아래와 같습니다.
-    // - 인물이나 캐릭터에 관한 수수께끼입니다.
-    // - 정답은 한 단어로 이루어져 있습니다.
-    // - 다양한 답변이 가능합니다.
-
-    // AI가 정답을 생각해냈어요. 준비되셨나요?
-
-    // 스무고개 시작합니다!
-
-    // AI: 
-    // `
 
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',
@@ -60,7 +46,6 @@ export default async function (req, res) {
       best_of: 1,
       // user: "curious-ai-hy",
     });
-    // console.log('responseCompletion : ', completion.data);
     console.log('정답은 ', completion.data.choices[0].text, '(이)야')
 
     const answer = completion.data.choices[0].text.replace(/\s/g, '');
