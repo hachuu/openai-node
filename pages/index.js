@@ -2,7 +2,6 @@ import Head from "next/head";
 import {useEffect} from "react";
 import { createGlobalStyle } from 'styled-components';
 import normalize from 'normalize.css'; // or use your own CSS Reset
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Main from './components/Main';
 import { useRouter } from 'next/router';
 

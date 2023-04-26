@@ -3,15 +3,8 @@ import useAPICall from "../hooks/useAPICall";
 import useCommon from "../hooks/useCommon";
 import styles from "../index.module.scss";
 import QuestionHistories from "./Histories";
-import { useRouter } from 'next/router';
 
 export default function Main () {
-  const router = useRouter();
-  useEffect(() => {
-    // 클라이언트 측에서만 실행되는 코드
-    // document 객체를 사용할 수 있음
-    console.log(document.title);
-  }, [router]);
 
   const [selectedConcept, setSelectedConcept] = useState('');
   const [category, setCategory] = useState('');
@@ -34,9 +27,9 @@ export default function Main () {
   const TWENTY_CNT = 20;
 
   const {
-    findIntent,
-    findSubjectFromQuestion,
-    question,
+    // findIntent,
+    // findSubjectFromQuestion,
+    // question,
     setAnswerResult,
     findAnswer
   } = useAPICall();
@@ -67,7 +60,7 @@ export default function Main () {
       let result;
       console.log(selectedConcept);
       if (selectedConcept === 'me') {
-        result = await getAboutMeResult();
+        // result = await getAboutMeResult();
       } else {
         result = await getTwentyQuestionResult();
       }
@@ -96,25 +89,25 @@ export default function Main () {
     return result;
   }
 
-  async function getAboutMeResult() {
-    // 의도 중 아이와 관련된 질문인지 확인
-    const existIntent = await findIntent(textInput);
-    if (existIntent && existIntent.result) {
-      console.log('existIntent : ', existIntent);
-      // keyword 추출
-      const keyword = await findSubjectFromQuestion(textInput);
-      // 질문에 대한 답변 추출
-      const response = await question(keyword, textInput);
-      const result = response?.result;
-      if (!result) {
-        return;
-      }
-      return result;
-    } else {
-      setTextInput("");
-      throw new Error('송하영과 관련된 질문이 아닙니다.');
-    }
-  }
+  // async function getAboutMeResult() {
+  //   // 의도 중 아이와 관련된 질문인지 확인
+  //   const existIntent = await findIntent(textInput);
+  //   if (existIntent && existIntent.result) {
+  //     console.log('existIntent : ', existIntent);
+  //     // keyword 추출
+  //     const keyword = await findSubjectFromQuestion(textInput);
+  //     // 질문에 대한 답변 추출
+  //     const response = await question(keyword, textInput);
+  //     const result = response?.result;
+  //     if (!result) {
+  //       return;
+  //     }
+  //     return result;
+  //   } else {
+  //     setTextInput("");
+  //     throw new Error('송하영과 관련된 질문이 아닙니다.');
+  //   }
+  // }
 
   async function setH3TitleResult() {
     const text = getH3Title(selectedConcept);
