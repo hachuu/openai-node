@@ -32,8 +32,8 @@ export default function QuestionHistories({questions, resultHistories, result, q
 
   return (
     <div className={styles.historyBox}>
-      { questions.map((question, index) => 
-        (index !== questions.length - 1) &&
+      { questions && questions.length && questions.map((question, index) => 
+        (index !== questions.length - 1) ??
       (
         <div key={index} className={styles.history}>
           <div className={styles.question}>질문 {index+1}. {question}</div>
