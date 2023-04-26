@@ -1,7 +1,8 @@
+import { useState } from "react";
+import styles from "../index.module.scss"
+
 export default function QuokkaLabel() {
   const [imgHover, setImgHover] = useState(false);
-  const styles = useStyles();
-
   function goMySource() {
     window.open('https://hachuu.github.io/hachu/');
   }
