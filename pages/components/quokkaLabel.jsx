@@ -1,4 +1,4 @@
-const QuokkaLabel = () => {
+export default QuokkaLabel = () => {
   const [imgHover, setImgHover] = useState(false);
   const styles = useStyles();
 
