@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import useAPICall from "../hooks/useAPICall";
 import useCommon from "../hooks/useCommon";
 import styles from "../index.module.scss";
-import QuestionHistories from "./questionHistories";
+import QuestionHistories from "./QuestionHistories";
 import { useRouter } from 'next/router';
 
 export default function Main () {
