@@ -14,9 +14,9 @@ export default function useCommon() {
     return titleObjs[selectedConcept];
   }
 
-  return {
+  return [
     makeRandomNumber,
     fileChange,
     getH3Title,
-  }
+  ]
 }

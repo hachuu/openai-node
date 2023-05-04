@@ -26,16 +26,23 @@ export default function Main () {
 
   const TWENTY_CNT = 20;
 
-  const {
-    // findIntent,
-    // findSubjectFromQuestion,
-    // question,
+  const [
+    fineTune,
+    findIntent,
+    findSubjectFromQuestion,
+    generatePrompt,
+    extractTextFromPDF,
+    question,
+    titleEmbedding,
+    embedding,
     setAnswerResult,
     findAnswer
-  } = useAPICall();
-  const {
+  ] = useAPICall();
+  const [
+    makeRandomNumber,
+    fileChange,
     getH3Title,
-  } = useCommon();
+  ] = useCommon();
 
   function spreadQuestion(result) {
     // setQuestionInput에 0.5초마다 한글자씩 추가하는 함수

@@ -1,9 +1,9 @@
 export default function useAPICall() {
 
-  async function fineTune() {
+  const fineTune = async () => {
     // file to newFormData
     const newFormData = new FormData();
-    newFormData.append("file", file);
+    newFormData.append("file", "");
     const uploadResponse = await fetch("/api/embeddingQuestions/uploadFile", {
       method: "POST",
       headers: {
@@ -24,7 +24,7 @@ export default function useAPICall() {
     });
   }
 
-  async function findIntent(text) {
+  const findIntent = async () => {
     let result;
     const response = await fetch("/api/embeddingQuestions/findIntent", {
       method: "POST",
@@ -40,7 +40,7 @@ export default function useAPICall() {
     return result;
   }
 
-  async function findSubjectFromQuestion(text) {
+  const findSubjectFromQuestion = async (text) => {
     let result;
     const response = await fetch("/api/embeddingQuestions/findSubjectFromQuestion", {
       method: "POST",
@@ -56,7 +56,7 @@ export default function useAPICall() {
     return result;
   }
 
-  async function generatePrompt() {
+  const generatePrompt = async () => {
     const response = await fetch("/api/embeddingQuestions/generateprompt", {
       method: "POST",
       headers: {
@@ -66,7 +66,7 @@ export default function useAPICall() {
     });
   }
 
-  async function extractTextFromPDF() {
+  const extractTextFromPDF = async () => {
     const response = await fetch("/api/embeddingQuestions/extractTextFromPdf", {
       method: "POST",
       headers: {
@@ -75,7 +75,8 @@ export default function useAPICall() {
       body: JSON.stringify({ test: '' }),
     });
   }
-  async function question(keyword, text) {
+
+  const question = async (keyword, text) => {
     let result;
     // const lastHistory = filterLastHistory();
     const response = await fetch("/api/embeddingQuestions/completion", {
@@ -92,7 +93,7 @@ export default function useAPICall() {
     return result;
   }
 
-  async function titleEmbedding() {
+  const titleEmbedding = async () => {
     let result;
     const response = await fetch("/api/embeddingQuestions/titleEmbedding", {
       method: "POST",
@@ -106,21 +107,22 @@ export default function useAPICall() {
     return result;
   }
 
-  async function embedding() {
+  const embedding = async (textInput) => {
+    const text = textInput;
     let result;
     const response = await fetch("/api/embeddingQuestions/embeddings", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text: textInput }),
+      body: JSON.stringify({ text }),
     }).then(
       (response) => result = response.json()
     );
     return result;
   }
 
-  async function setAnswerResult(level, category) {
+  const setAnswerResult = async (level, category) => {
     let result;
     const answerRes = await fetch("/api/twentyQuestions/setAnswer", {
       method: "POST",
@@ -134,7 +136,7 @@ export default function useAPICall() {
     return result;
   }
 
-  async function findAnswer({text, correctAnswer, count, category}) {
+  const findAnswer = async ({text, correctAnswer, count, category}) => {
     let result;
     const response = await fetch("/api/twentyQuestions/findAnswer", {
       method: "POST",
@@ -150,7 +152,7 @@ export default function useAPICall() {
     return result;
   }
 
-  return {
+  return [
     fineTune,
     findIntent,
     findSubjectFromQuestion,
@@ -161,5 +163,5 @@ export default function useAPICall() {
     embedding,
     setAnswerResult,
     findAnswer
-  }
+  ]
 }
