@@ -136,14 +136,14 @@ export default function useAPICall() {
     return result;
   }
 
-  const findAnswer = async ({text, correctAnswer, count, category}) => {
+  const findAnswer = async ({messagesHistory, text, correctAnswer, count, category}) => {
     let result;
     const response = await fetch("/api/twentyQuestions/findAnswer", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text, correctAnswer, count, category}),
+      body: JSON.stringify({messagesHistory, text, correctAnswer, count, category}),
     }).then(
       (response) => {
         result = response.json();

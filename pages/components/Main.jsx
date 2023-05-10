@@ -26,6 +26,8 @@ export default function Main () {
 
   const TWENTY_CNT = 20;
 
+  const [messagesHistory, setMessagesHistory] = useState([]);
+
   const [
     fineTune,
     findIntent,
@@ -88,10 +90,26 @@ export default function Main () {
 
   async function getTwentyQuestionResult() {
     // 질문에 대한 답변 추출
-    const response = await findAnswer({text: textInput, correctAnswer, count, category});
-    if (response.success) {
-      setRestart(true);
+    if (messagesHistory.length === 0) {
+      messagesHistory.push(
+        {role: 'system', content: `
+          스무고개 게임 시작!
+          절대 사용자에게 '${correctAnswer}'(을)를 언급하면 안되고 '${category}'이라고 지칭해줘.
+          정답을 직접적으로 물어보는 질문에는 정답을 알려주지마.
+          몇 글자인지 물어보는 질문에는 '${correctAnswer.length}글자'라고 답해줘.
+          사용자가 정답을 언급하면 '정답입니다!'하고 ${correctAnswer}에 대한 간략한 설명과 함께 답변해줘.
+        ` }
+      )
     }
+    messagesHistory.push({role: "user", content: textInput})
+    const response = await findAnswer({messagesHistory, text: textInput, correctAnswer, count, category});
+    if (response) {
+      messagesHistory.push({role: "assistant", content: response.result})
+      if (response.success) {
+        setRestart(true);
+      }
+    }
+
     const result = response?.result.replace(/\\n/g, '') || '모르겠어';
     return result;
   }
@@ -131,7 +149,7 @@ export default function Main () {
   }
 
   async function setAnswer() {
-    const level = prompt('스무고개 난이도를 선택해주세요 1~3(숫자만 입력해주세요)');
+    const level = 3;//prompt('스무고개 난이도를 선택해주세요 1~3(숫자만 입력해주세요)');
     const result = await setAnswerResult(level, category);
     console.log(result?.result)
     setCorrectAnswer(result?.result);
@@ -153,6 +171,7 @@ export default function Main () {
     setCount(0);
     setQuestions([]);
     setResultHistories([]);
+    setMessagesHistory([]);
   }
 
   useEffect(() => {

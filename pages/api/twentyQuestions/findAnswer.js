@@ -5,7 +5,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const messagesHistory = [];
+
 
 export default async function (req, res) {
   if (!configuration.apiKey) {
@@ -18,29 +18,13 @@ export default async function (req, res) {
   }
 
   try {
+    const messagesHistory = req.body.messagesHistory;
     const answer = req.body.correctAnswer;
-    const text = req.body.text;
+    // const text = req.body.text;
     const count = req.body.count;
     const category = req.body.category;
 
-    if (count === 0 && messagesHistory.length > 0) {
-      messagesHistory.splice(0, messagesHistory.length);
-    }
-
-    if (messagesHistory.length === 0) {
-      messagesHistory.push(
-        {role: 'system', content: `
-          스무고개 게임 시작!
-          절대 사용자에게 '${answer}'(을)를 언급하면 안되고 '${category}'이라고 지칭해줘.
-          정답을 직접적으로 물어보는 질문에는 정답을 알려주지마.
-          몇 글자인지 물어보는 질문에는 '${answer.length}글자'라고 답해줘.
-          사용자가 정답을 언급하면 '정답입니다!'하고 ${answer}에 대한 간략한 설명과 함께 답변해줘.
-        ` }
-      )
-    }
-
-    messagesHistory.push({role: "user", content: text})
-    console.log('findAnswer messagesHistory : ', messagesHistory);
+    console.log(messagesHistory)
 
     const completion = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
@@ -54,10 +38,7 @@ export default async function (req, res) {
     const removeAnswer = 'O'.repeat(answer.length);
     const resultContent = completion.data.choices[0].message.content;
     const result = resultContent?.replace(pattern, removeAnswer);
-    messagesHistory.push({role: "assistant", content: result})
-
-    console.log('findAnswer result : ', resultContent)
-
+    
     const success = result.includes('정답입니다!');
     if (success) {
       // messageHistory비우기
