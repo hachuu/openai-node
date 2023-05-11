@@ -172,6 +172,7 @@ export default function Main () {
     setQuestions({ questions: [], version: 0});
     setResultHistories([]);
     setMessagesHistory([]);
+    setResult('');
   }
 
   useEffect(() => {
