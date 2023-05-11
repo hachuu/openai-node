@@ -1,8 +1,13 @@
 import styles from "../index.module.scss";
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-export default function QuestionHistories({questions, resultHistories, result, questionInput, intervalResult}) {
+const QuestionHistories = React.memo(({questions, version, resultHistories, result, questionInput, intervalResult}) => {
   const curRef = useRef(null);
+
+  useEffect(() => {
+    console.log('version', version);
+    console.log('questions', questions);
+  }, [version])
 
   useEffect(() => {
     if (curRef.current) {
@@ -36,7 +41,7 @@ export default function QuestionHistories({questions, resultHistories, result, q
         questions.map((question, index) => 
         (index !== questions.length - 1) ??
         (
-          <div key={index} className={styles.history}>
+          <div key={version+index} className={styles.history}>
             <div className={styles.question}>질문 {index+1}. {question}</div>
             <div className={styles.lastAnswer}>{resultHistories[index]}</div>
           </div>
@@ -52,4 +57,6 @@ export default function QuestionHistories({questions, resultHistories, result, q
       }
     </div>
   )
-}
+});
+
+export default QuestionHistories;

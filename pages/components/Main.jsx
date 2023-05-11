@@ -13,7 +13,7 @@ export default function Main () {
   const [textInput, setTextInput] = useState("");
   const [questionInput, setQuestionInput] = useState("");
   const [file, setFile] = useState();
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState({ questions: [], version: 0});
   const [count, setCount] = useState(0);
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [resultHistories, setResultHistories] = useState([]);
@@ -77,7 +77,7 @@ export default function Main () {
       setQuestionInput(textInput);
       spreadQuestion(result);
       setResultHistories([...resultHistories, result]);
-      setQuestions([...questions, textInput]);
+      setQuestions({questions: [...questions.questions, textInput], version: questions.version + 1});
       setTextInput("");
     } catch(error) {
       console.error(error);
@@ -169,7 +169,7 @@ export default function Main () {
     setRestart(false);
     setAnswer();
     setCount(0);
-    setQuestions([]);
+    setQuestions({ questions: [], version: 0});
     setResultHistories([]);
     setMessagesHistory([]);
   }
@@ -195,7 +195,7 @@ export default function Main () {
       <div className={styles.left}>
         <div className={styles.leftBox}>
           <h3>{h3Title}</h3>
-          <QuestionHistories questions={questions} resultHistories={resultHistories} result={result} questionInput={questionInput} intervalResult={intervalResult} />
+          <QuestionHistories questions={questions.questions} version={questions.version} resultHistories={resultHistories} result={result} questionInput={questionInput} intervalResult={intervalResult} />
         </div>
       </div>
       <div className={styles.right}>
