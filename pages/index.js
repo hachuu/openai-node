@@ -4,6 +4,7 @@ import { createGlobalStyle } from 'styled-components';
 import normalize from 'normalize.css'; // or use your own CSS Reset
 import Main from './components/Main';
 import { useRouter } from 'next/router';
+import Liar from "./components/Liar";
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
@@ -30,7 +31,8 @@ export default function Home() {
         <link rel="icon" href="/quokka.svg" />
         <link href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Dongle:wght@300&family=Rubik+Pixels&display=swap" rel="stylesheet"/>
       </Head>
-      <Main/>
+      {/* <Main/> */}
+      <Liar/>
 
       {/* <BrowserRouter>
         <Switch>
