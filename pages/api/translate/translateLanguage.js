@@ -17,20 +17,18 @@ export default async function (req, res) {
 
   try {
 
-    const level = req.body.level;
-    const category = req.body.category;
+    const lang = req.body.targetLanguage;
+    const text = req.body.text;
 
     const prompt = 
     `
-    당신은 스무고개 게임의 AI입니다.
-    게임의 주제는 '${category}'입니다. '${category}' 중에서 하나를 선택하세요.
-    선택한 난이도는 ${level}입니다.
-    난이도에 맞게 정답을 생각해주세요.
-
-    정답: 
+    제 말을 ${lang}언어로 번역해 주세요.
+    번역할 문장: ${text}
+    번역:
     `
 
     console.log(prompt);
+    console.log(req.body)
 
     const completion = await openai.createCompletion({
       model: 'text-davinci-003',
@@ -49,9 +47,7 @@ export default async function (req, res) {
       best_of: 1,
       // user: "curious-ai-hy",
     });
-    console.log('정답은 ', completion.data.choices[0].text, '(이)야')
-
-    const answer = completion.data.choices[0].text.replace(/\s/g, '');
+    const answer = completion.data.choices[0].text;
     res.status(200).json({ result: answer });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
