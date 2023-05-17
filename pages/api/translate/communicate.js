@@ -1,11 +1,19 @@
 import { Configuration, OpenAIApi } from "openai";
+import Cors from 'cors';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+const cors = 
+  // 옵션을 설정합니다.
+  Cors({
+    origin: 'http://localhost:8080', // 클라이언트 출처 도메인에 맞게 설정
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // 허용할 HTTP 메서드 목록
+    allowedHeaders: ['Content-Type'], // 허용할 요청 헤더 목록
+  });
 
-export default async function (req, res) {
+const communicationFc = async (req, res) => {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -16,6 +24,12 @@ export default async function (req, res) {
   }
 
   try {
+    console.log(req.body);
+    console.log(req);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
     const messagesHistory = req.body.messagesHistory;
 
     const completion = await openai.createChatCompletion({
@@ -43,7 +57,12 @@ export default async function (req, res) {
     }
   }
 }
-
+export default async function (req, res) {
+  await cors(req, res);
+  if (req.method === 'POST') {
+    await communicationFc(req, res);
+  }
+}
 // {
 //   "messagesHistory": [
 //       {
