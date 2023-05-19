@@ -1,19 +1,11 @@
 import { Configuration, OpenAIApi } from "openai";
-import Cors from 'cors';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-const cors = 
-  // 옵션을 설정합니다.
-  Cors({
-    origin: 'http://localhost:8080', // 클라이언트 출처 도메인에 맞게 설정
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // 허용할 HTTP 메서드 목록
-    allowedHeaders: ['Content-Type'], // 허용할 요청 헤더 목록
-  });
 
-const communicationFc = async (req, res) => {
+export default async function (req, res) {
   if (!configuration.apiKey) {
     res.status(500).json({
       error: {
@@ -24,11 +16,23 @@ const communicationFc = async (req, res) => {
   }
 
   try {
+    // console.log(req.body);
     console.log(req.body);
-    console.log(req);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    // res.setHeader('Origin', 'http://localhost:8080'),
+    // res.setHeader('Content-Type', 'application/json');
+    // res.setHeader('Accept', '*/*');
+    // res.setHeader('Accept-Encoding', 'gzip, deflate, br');
+    // res.setHeader('Connection', 'keep-alive');
+    // res.setHeader('Host', 'localhost:8080');
+    // res.setHeader('Referer', 'http://localhost:8080/');
+    // res.setHeader('Sec-Fetch-Dest', 'empty');
+    // res.setHeader('Sec-Fetch-Mode', 'cors');
+    // res.setHeader('Sec-Fetch-Site', 'same-origin');
+
+
 
     const messagesHistory = req.body.messagesHistory;
 
@@ -41,7 +45,8 @@ const communicationFc = async (req, res) => {
     });
     
     const resultContent = completion.data.choices[0].message.content;
-    res.status(200).json({ result: resultContent });
+    const pastQuestion = messagesHistory[messagesHistory.length - 1].content;
+    res.status(200).json({ result: resultContent, pastQuestion });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -57,12 +62,7 @@ const communicationFc = async (req, res) => {
     }
   }
 }
-export default async function (req, res) {
-  await cors(req, res);
-  if (req.method === 'POST') {
-    await communicationFc(req, res);
-  }
-}
+
 // {
 //   "messagesHistory": [
 //       {

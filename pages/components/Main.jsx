@@ -176,7 +176,7 @@ export default function Main () {
   }
 
   useEffect(() => {
-    // selectConcept();
+    selectConcept();
   }, [])
 
   useEffect(() => {
