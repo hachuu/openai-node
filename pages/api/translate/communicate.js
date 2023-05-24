@@ -22,7 +22,7 @@ export default async function (req, res) {
       res.status(200)
         .setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type, withCredentials, SameSite, Set-Cookie')
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
         .setHeader('Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Credentials', 'true');
       res.end();
@@ -32,7 +32,7 @@ export default async function (req, res) {
       console.log(req.body);
       res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type, withCredentials, SameSite, Set-Cookie')
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
         .setHeader('Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Credentials', 'true');
 
