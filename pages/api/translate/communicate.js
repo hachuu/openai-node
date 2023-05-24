@@ -22,7 +22,7 @@ export default async function (req, res) {
       res.status(200)
         .setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type, SameSite')
         .setHeader('Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Credentials', 'true');
       res.end();
@@ -32,9 +32,15 @@ export default async function (req, res) {
       console.log(req.body);
       res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type, SameSite')
         .setHeader('Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Credentials', 'true');
+
+
+        //Request header field SameSite is not allowed by Access-Control-Allow-Headers.
+
+      
+
       // res.setHeader('Content-Type', 'application/json');
       // res.setHeader('Accept', '*/*');
       // res.setHeader('Accept-Encoding', 'gzip, deflate, br');
