@@ -16,38 +16,49 @@ export default async function (req, res) {
   }
 
   try {
-    // console.log(req.body);
-    console.log(req.body);
-    res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Origin', 'http://125.159.61.195:30011');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    // res.setHeader('Content-Type', 'application/json');
-    // res.setHeader('Accept', '*/*');
-    // res.setHeader('Accept-Encoding', 'gzip, deflate, br');
-    // res.setHeader('Connection', 'keep-alive');
-    // res.setHeader('Host', 'localhost:8080');
-    // res.setHeader('Referer', 'http://localhost:8080/');
-    // res.setHeader('Sec-Fetch-Dest', 'empty');
-    // res.setHeader('Sec-Fetch-Mode', 'cors');
-    // res.setHeader('Sec-Fetch-Site', 'same-origin');
+
+    if (req.method === 'OPTIONS') {
+      // OPTIONS 요청에 대한 헤더 처리
+      res.status(200)
+        .setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
+        .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+      res.end();
+    } else {
+
+      // console.log(req.body);
+      console.log(req.body);
+      res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Origin', 'http://125.159.61.195:30011');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+      // res.setHeader('Content-Type', 'application/json');
+      // res.setHeader('Accept', '*/*');
+      // res.setHeader('Accept-Encoding', 'gzip, deflate, br');
+      // res.setHeader('Connection', 'keep-alive');
+      // res.setHeader('Host', 'localhost:8080');
+      // res.setHeader('Referer', 'http://localhost:8080/');
+      // res.setHeader('Sec-Fetch-Dest', 'empty');
+      // res.setHeader('Sec-Fetch-Mode', 'cors');
+      // res.setHeader('Sec-Fetch-Site', 'same-origin');
 
 
 
-    const messagesHistory = req.body.messagesHistory;
+      const messagesHistory = req.body.messagesHistory;
 
-    const completion = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
-      max_tokens: 1000,
-      temperature: 0.5,
-      stop: ['\n\n', '\n', 'AI:'],
-      messages: messagesHistory
-    });
-    
-    const resultContent = completion.data.choices[0].message.content;
-    const pastQuestion = messagesHistory[messagesHistory.length - 1].content;
-    res.status(200).json({ result: resultContent, pastQuestion });
+      const completion = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        max_tokens: 1000,
+        temperature: 0.5,
+        stop: ['\n\n', '\n', 'AI:'],
+        messages: messagesHistory
+      });
+      
+      const resultContent = completion.data.choices[0].message.content;
+      const pastQuestion = messagesHistory[messagesHistory.length - 1].content;
+      res.status(200).json({ result: resultContent, pastQuestion });
+    }
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
