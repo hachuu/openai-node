@@ -20,20 +20,20 @@ export default async function (req, res) {
     if (req.method === 'OPTIONS') {
       // OPTIONS 요청에 대한 헤더 처리
       res.status(200)
-        .setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
+        .setHeader('Access-Control-Allow-Origin', process.env.VUE_APP_TB_DOMAIN)
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
-        .setHeader('Origin', 'http://125.159.61.195:30011')
+        .setHeader('Origin', process.env.VUE_APP_TB_DOMAIN)
         .setHeader('Access-Control-Allow-Credentials', 'true');
       res.end();
     } else {
 
       // console.log(req.body);
       console.log(req.body);
-      res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
+      res.setHeader('Access-Control-Allow-Origin', process.env.VUE_APP_TB_DOMAIN)
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
-        .setHeader('Origin', 'http://125.159.61.195:30011')
+        .setHeader('Origin', process.env.VUE_APP_TB_DOMAIN)
         .setHeader('Access-Control-Allow-Credentials', 'true');
 
 
