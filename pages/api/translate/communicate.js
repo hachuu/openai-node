@@ -22,17 +22,19 @@ export default async function (req, res) {
       res.status(200)
         .setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+        .setHeader('Origin', 'http://125.159.61.195:30011')
+        .setHeader('Access-Control-Allow-Credentials', 'true');
       res.end();
     } else {
 
       // console.log(req.body);
       console.log(req.body);
-      res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      res.setHeader('Origin', 'http://125.159.61.195:30011');
-      res.setHeader('Access-Control-Allow-Credentials', true);
+      res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011')
+        .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        .setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+        .setHeader('Origin', 'http://125.159.61.195:30011')
+        .setHeader('Access-Control-Allow-Credentials', 'true');
       // res.setHeader('Content-Type', 'application/json');
       // res.setHeader('Accept', '*/*');
       // res.setHeader('Accept-Encoding', 'gzip, deflate, br');
