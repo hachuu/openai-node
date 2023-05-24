@@ -22,6 +22,7 @@ export default async function (req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Origin', 'http://125.159.61.195:30011');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     // res.setHeader('Content-Type', 'application/json');
     // res.setHeader('Accept', '*/*');
     // res.setHeader('Accept-Encoding', 'gzip, deflate, br');
