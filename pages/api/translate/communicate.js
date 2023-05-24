@@ -18,7 +18,7 @@ export default async function (req, res) {
   try {
     // console.log(req.body);
     console.log(req.body);
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://125.159.61.195:30011');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Origin', 'http://125.159.61.195:30011');
