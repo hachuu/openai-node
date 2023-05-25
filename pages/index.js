@@ -1,9 +1,11 @@
 import Head from "next/head";
-import {useEffect} from "react";
+import React, { useEffect, useState } from "react";
 import { createGlobalStyle } from 'styled-components';
 import normalize from 'normalize.css'; // or use your own CSS Reset
-import Main from './components/Main';
+import Twenties from './components/Twenties';
 import { useRouter } from 'next/router';
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import Home from "./components/index/Home";
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
@@ -13,13 +15,15 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export default function Home() {
+export default function App() {
   const router = useRouter();
+  const [isDocument, setIsDocument] = useState(false);
 
   useEffect(() => {
     if(typeof document !== 'undefined') {
       // you are safe to use the "document" object here
       console.log(document.location.href);
+      setIsDocument(true);
     }
   }, []);
 
@@ -30,15 +34,16 @@ export default function Home() {
         <link rel="icon" href="/quokka.svg" />
         <link href="https://fonts.googleapis.com/css2?family=Cute+Font&family=Dongle:wght@300&family=Rubik+Pixels&display=swap" rel="stylesheet"/>
       </Head>
-      <Main/>
-
-      {/* <BrowserRouter>
-        <Switch>
-          <Route exact path='/'>
-            <Main />
-          </Route>
-        </Switch>
-      </BrowserRouter> */}
+      {/* <button onClick={()=>router.push('/games')}>Games</button> */}
+      <Home/>
+      {/* {
+        isDocument &&
+          <BrowserRouter>
+            <Switch>
+              <Route exact path='/' Component={Main}/>
+            </Switch>
+          </BrowserRouter>
+      } */}
     </div>
   );
 }
