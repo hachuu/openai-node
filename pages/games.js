@@ -25,27 +25,28 @@ export default function Games() {
 
   return (
       isClient && 
-      <div>
-        <h1>Games</h1>
-        <BrowserRouter>
-          <ul>
-            <li>
-              <Link to="/games">Main</Link>
-            </li>
-            <li>
-              <Link to="/games/twenty">Twenty</Link>
-            </li>
-            <li>
-              <Link to="/games/liar">Liar</Link>
-            </li>
-          </ul>
-          <Routes>
-            <Route exact path='/games'/>
-            <Route path='/games/twenty' element={<Twenties />}/>
-            {/* <Route path='/twenty' element={<Main />}/> */}
-            <Route path='/games/liar' element={<Liar />}/>
-          </Routes>
-        </BrowserRouter>
-      </div>
+      // <div>
+      //   <h1>Games</h1>
+      //   <BrowserRouter>
+      //     <ul>
+      //       <li>
+      //         <Link to="/games">Main</Link>
+      //       </li>
+      //       <li>
+      //         <Link to="/games/twenty">Twenty</Link>
+      //       </li>
+      //       <li>
+      //         <Link to="/games/liar">Liar</Link>
+      //       </li>
+      //     </ul>
+      //     <Routes>
+      //       <Route exact path='/games'/>
+      //       <Route path='/games/twenty' element={<Twenties />}/>
+      //       {/* <Route path='/twenty' element={<Main />}/> */}
+      //       <Route path='/games/liar' element={<Liar />}/>
+      //     </Routes>
+      //   </BrowserRouter>
+      // </div>
+      <Twenties/>
   );
 }

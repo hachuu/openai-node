@@ -138,6 +138,27 @@ $primary1: #51b5ef;
   padding-left: 25px;
 }
 
+.row {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+}
+.col_lg_3 {
+  -ms-flex: 0 0 25%;
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+
+.col_md_4 {
+  -ms-flex: 0 0 33.333333%;
+  flex: 0 0 33.333333%;
+  max-width: 33.333333%;
+}
+
+
 .header_section .nav_container {
   margin: 0 auto;
 }
@@ -240,6 +261,16 @@ $primary1: #51b5ef;
   width: 100%;
   text-align: center;
   margin-top: 30px;
+  a,
+  a:hover,
+  a:focus {
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus {
+    color: initial;
+  }
 }
 
 .menu_width {
@@ -327,7 +358,7 @@ $primary1: #51b5ef;
   display: flex;
   align-items: center;
   height: calc(100% - 80px);
-  padding: 45px 0 90px 0;
+  // padding: 45px 0 0 0;
 
 
   .side_heading {

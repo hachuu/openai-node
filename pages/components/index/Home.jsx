@@ -31,7 +31,7 @@ export default function Home() {
                                 <a href="#">HOME</a>
                                 <a href="#">ABOUT</a>
                                 <a href="javascript:;" onClick={()=>router.push('/games')}>Game</a>
-                                <a href="javascript:;" onClick={()=>console.log('contact')}>Contact Us</a>
+                                <a href="javascript:;" onClick={()=>console.log('contact')}>Contact Me</a>
                             </div>
                             </div>
                         </div>
@@ -51,78 +51,6 @@ export default function Home() {
                         U
                         💌
                         </h5>
-                    </div>
-                    <div className={styles.container_fluid}>
-                        <div className={styles.row}>
-                            <div className={`${styles.col_lg_3} ${styles.col_md_4} ${styles.offset_md_1}`}>
-                                <div id="carouselExampleIndicators" className={`${styles.carousel} ${styles.slide}`} data_ride="carousel">
-                                    <ol className={styles.carousel_indicators}>
-                                        <li data_target="#carouselExampleIndicators" data_slide_to="0" className={styles.active}>
-                                        01
-                                        </li>
-                                        <li data_target="#carouselExampleIndicators" data_slide_to="1">
-                                        02
-                                        </li>
-                                        <li data_target="#carouselExampleIndicators" data_slide_to="2">
-                                        03
-                                        </li>
-                                        <li data_target="#carouselExampleIndicators" data_slide_to="3">
-                                        04
-                                        </li>
-                                    </ol>
-                                    <div className={styles.carousel_inner}>
-                                        <div className={`${styles.carousel_item} ${styles.active}`}>
-                                        <div className={`${styles.img_box} ${styles.b_1}`}>
-                                            <img src="images/slider_img.png" alt="" />
-                                        </div>
-                                        </div>
-                                        <div className={styles.carousel_item}>
-                                        <div className={`${styles.img_box} ${styles.b_2}`}>
-                                            <img src="images/hot_1.png" alt="" />
-                                        </div>
-                                        </div>
-                                        <div className={styles.carousel_item}>
-                                        <div className={`${styles.img_box} ${styles.b_3}`}>
-                                            <img src="images/hot_2.png" alt="" />
-                                        </div>
-                                        </div>
-                                        <div className={styles.carousel_item}>
-                                        <div className={`${styles.img_box} ${styles.b_4}`}>
-                                            <img src="images/hot_3.png" alt="" />
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.carousel_btn_box}>
-                                        <a className={styles.carousel_control_prev} href="#carouselExampleIndicators" role="button" data_slide="prev">
-                                            <span className={styles.sr_only}></span>
-                                            {/* Previous */}
-                                        </a>
-                                        <a className={styles.carousel_control_next} href="#carouselExampleIndicators" role="button" data_slide="next">
-                                            <span className={styles.sr_only}></span>
-                                            {/* Next */}
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={`${styles.col_md_5} ${styles.offset_md_1}`}>
-                                <div className={styles.detail_box}>
-                                    <h1>
-                                        Open AI <br/>
-                                        Toy Project
-                                    </h1>
-
-                                    <div className={styles.btn_box}>
-                                        <a href="" className={styles.btn_1}>
-                                        Contact Us
-                                        </a>
-                                        <a href="" className={styles.btn_2}>
-                                        Order Now
-                                        </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </section>
             </div>
