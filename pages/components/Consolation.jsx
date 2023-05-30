@@ -111,8 +111,7 @@ export default function Consolation () {
     console.log(consolation)
   }, []);
 
-  async function send(e) {
-    e.preventDefault();
+  async function send() {
     setIsPending(true);
     setIsResult(false);
     // send message to server
@@ -140,7 +139,7 @@ export default function Consolation () {
           <textarea value={consolation} onChange={(e) => setConsolation(e.target.value)} />
         </div>
         <button className='button' disabled={isPending}
-          onClick={(e) => send(e)}>💌 {isPending ? 'sending...' : 'send'} 💌</button>
+          onClick={() => send()}>💌 {isPending ? 'sending...' : 'send'} 💌</button>
       </div>
       {isPending && <Spinner/>}
       {isResult && (
