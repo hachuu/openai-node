@@ -34,26 +34,42 @@ export default async function (req, res) {
       //   .setHeader('Access-Control-Allow-Credentials', 'true');
       
       const userMessage = req.body.consolation;
-      const messages = [
-        {
-            "role": "system",
-            "content": "당신은 다정한 사람입니다. user의 고민에 대해 다정하게 대답을 해주세요."
-        },
-        {
-            "role": "user",
-            "content": userMessage
-        },
-      ]
+      const prompt = 
+      `
+      당신은 다정한 사람입니다. user의 고민에 대해 다정하게 대답을 해주세요.
+      고민: ${userMessage}
+      you:
+      `
+      // const messages = [
+      //   {
+      //       "role": "system",
+      //       "content": "당신은 다정한 사람입니다. user의 고민에 대해 다정하게 대답을 해주세요."
+      //   },
+      //   {
+      //       "role": "user",
+      //       "content": userMessage
+      //   },
+      // ]
 
-      const completion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        max_tokens: 500,
-        temperature: 0.5,
-        stop: ['\n\n', '\n', 'AI:'],
-        messages
+      const completion = await openai.createCompletion({
+        model: 'text-davinci-003',
+        prompt,
+        max_tokens: 1000,
+        temperature: 0.9,
+        // top_p: 1.0,
+        // presence_penalty: -1.0,
+        // frequency_penalty: -1.0,
+        // best_of: 2,
+        // stop: ['\n\n', '\n', 'Answer:'],
+        // n: 1,
+        // stream: false,
+        presence_penalty: 0,
+        frequency_penalty: 0,
+        best_of: 1,
+        // user: "curious-ai-hy",
       });
       
-      const resultContent = completion.data.choices[0].message.content;
+      const resultContent = completion.data.choices[0].text;
       console.log(resultContent)
       res.status(200).json({ result: resultContent });
     }
