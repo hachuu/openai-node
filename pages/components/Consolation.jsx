@@ -122,9 +122,25 @@ export default function Consolation () {
     setIsPending(false);
   };
 
-  const [
-    expressMyEmotion
-  ] = useEmotionsCall();
+  // const [
+  //   expressMyEmotion
+  // ] = useEmotionsCall();
+
+  const expressMyEmotion = async (consolation) => {
+    let result;
+    const response = await fetch("/api/feelings/expressMyEmotion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({consolation}),
+    }).then(
+      (response) => {
+        result = response.json();
+      }
+    );
+    return result;
+  }
 
   return (
     <Container>
