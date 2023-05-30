@@ -27,17 +27,17 @@ export default async function (req, res) {
         .setHeader('Access-Control-Allow-Credentials', 'true');
       res.end();
     } else {
-      res.setHeader('Access-Control-Allow-Origin', process.env.VUE_APP_TB_DOMAIN)
-        .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-        .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
-        .setHeader('Origin', process.env.VUE_APP_TB_DOMAIN)
-        .setHeader('Access-Control-Allow-Credentials', 'true');
+      // res.setHeader('Access-Control-Allow-Origin', process.env.VUE_APP_TB_DOMAIN)
+      //   .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+      //   .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
+      //   .setHeader('Origin', process.env.VUE_APP_TB_DOMAIN)
+      //   .setHeader('Access-Control-Allow-Credentials', 'true');
       
       const userMessage = req.body.consolation;
       const messages = [
         {
             "role": "system",
-            "content": "당신은 다정한 사람입니다. 업무에 지친 사람에게 다정하게 대답을 해주세요."
+            "content": "당신은 다정한 사람입니다. user의 고민에 대해 다정하게 대답을 해주세요."
         },
         {
             "role": "user",

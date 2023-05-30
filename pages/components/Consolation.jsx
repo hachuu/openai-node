@@ -108,39 +108,29 @@ export default function Consolation () {
     setTimeout(() => {
       setFadeIn(true);
     }, 1000);
+    console.log(consolation)
   }, []);
 
-  async function send() {
+  async function send(e) {
+    e.preventDefault();
     setIsPending(true);
     setIsResult(false);
     // send message to server
-    const response = await expressMyEmotion(consolation);
-    if (response) {
-      setIsResult(true);
-      setResult(response.result);
+    try {
+      const response = await expressMyEmotion(consolation);
+      if (response) {
+        setIsResult(true);
+        setResult(response.result);
+      }
+    } catch (error) {
+      console.log(error);
     }
     setIsPending(false);
   };
 
-  // const [
-  //   expressMyEmotion
-  // ] = useEmotionsCall();
-
-  const expressMyEmotion = async (consolation) => {
-    let result;
-    const response = await fetch("/api/feelings/expressMyEmotion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({consolation}),
-    }).then(
-      (response) => {
-        result = response.json();
-      }
-    );
-    return result;
-  }
+  const [
+    expressMyEmotion
+  ] = useEmotionsCall();
 
   return (
     <Container>
@@ -150,7 +140,7 @@ export default function Consolation () {
           <textarea value={consolation} onChange={(e) => setConsolation(e.target.value)} />
         </div>
         <button className='button' disabled={isPending}
-          onClick={() => send()}>💌 {isPending ? 'sending...' : 'send'} 💌</button>
+          onClick={(e) => send(e)}>💌 {isPending ? 'sending...' : 'send'} 💌</button>
       </div>
       {isPending && <Spinner/>}
       {isResult && (
