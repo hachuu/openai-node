@@ -27,8 +27,6 @@ export default async function (req, res) {
         .setHeader('Access-Control-Allow-Credentials', 'true');
       res.end();
     } else {
-
-      console.log(req.body);
       res.setHeader('Access-Control-Allow-Origin', process.env.VUE_APP_TB_DOMAIN)
         .setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
         .setHeader('Access-Control-Allow-Headers', 'Authorization, Origin, X-Requested-With, Content-Type, Accept, crossDomain, withCredentials, SameSite, Set-Cookie')
@@ -49,7 +47,7 @@ export default async function (req, res) {
 
       const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
-        max_tokens: 1000,
+        max_tokens: 500,
         temperature: 0.5,
         stop: ['\n\n', '\n', 'AI:'],
         messages
