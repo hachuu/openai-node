@@ -18,7 +18,7 @@ export default function About() {
 
   useEffect(() => {
     setIsClient(true);
-    console.log('games')
+    console.log('about')
   }, []);
 
   return (
