@@ -29,7 +29,7 @@ export default function Home() {
                             <div id="myNav" className={ `${styles.overlay} ${toggleMenu ? styles.menu_width : ''}`}>
                             <div className={styles.overlay_content}>
                                 <a href="#">HOME</a>
-                                <a href="#">ABOUT</a>
+                                <a href="javascript:;" onClick={()=>router.push('/about')}>ABOUT</a>
                                 <a href="javascript:;" onClick={()=>router.push('/games')}>Game</a>
                                 <a href="javascript:;" onClick={()=>console.log('contact')}>Contact Me</a>
                             </div>

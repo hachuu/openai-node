@@ -3,7 +3,25 @@ import useAPICall from "../hooks/useAPICall";
 import useCommon from "../hooks/useCommon";
 import styles from "../index.module.scss";
 import QuestionHistories from "./Histories";
+import styled from 'styled-components';
 
+
+const BackButton = styled.button`
+  // 오른쪽 하단 고정
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: black;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  &:hover {
+    background-color: hotpink;
+  }
+`;
 export default function Twenties () {
 
   const [selectedConcept, setSelectedConcept] = useState('');
@@ -176,7 +194,9 @@ export default function Twenties () {
   }
 
   useEffect(() => {
-    // selectConcept();
+    if (prompt('게임을 시작하려면 아무 키나 눌러주세요')) {
+      selectConcept();
+    }
   }, [])
 
   useEffect(() => {
@@ -246,7 +266,9 @@ export default function Twenties () {
           </div>
         </div>
       </div>
-      
+      <BackButton onClick={() => 
+        window.location.href = '/'
+      }>돌아가기</BackButton>
     </div>
   )
 }
