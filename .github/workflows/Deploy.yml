@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  S3_BUCKET_NAME: hachu-bucket.mash-up.kr
+  S3_BUCKET_NAME: hachu-bucket
   CODE_DEPLOY_APPLICATION_NAME: open-ai-code-deploy
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: open-ai-deploy
 
