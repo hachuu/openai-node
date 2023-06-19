@@ -17,8 +17,8 @@ export default async function (req, res) {
 
   try {
 
-    const lang = req.body.targetLanguage;
-    const text = req.body.text;
+    const lang = req.body.targetLanguage || JSON.parse(req.body).targetLanguage ;
+    const text = req.body.text || JSON.parse(req.body).text ;
 
     const prompt = 
     `
